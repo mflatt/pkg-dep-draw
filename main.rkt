@@ -20,6 +20,7 @@
   (define srcs null)
   (define no-build? #f)
   (define no-build-lines? #f)
+  (define no-trans-lines? #f)
   (define invert? #f)
   (define quiet? #f)
   (define dest-file #f)
@@ -42,6 +43,8 @@
       (set! no-build? #t)]
      [("--no-build-lines") "Suppress build-dependency lines"
       (set! no-build-lines? #t)]
+     [("--no-trans-lines") "Suppress transitive lines"
+      (set! no-trans-lines? #t)]
      [("--reverse") "Follow dependencies backwards"
       (set! invert? #t)]
      [("--scale") scale "Initial drawing scale"
@@ -74,6 +77,7 @@
                 #:srcs srcs
                 #:no-build? no-build?
                 #:no-build-lines? no-build-lines?
+                #:no-trans-lines? no-trans-lines?
                 #:invert? invert?
                 #:quiet quiet?
                 #:dest-file dest-file
@@ -87,6 +91,7 @@
                       #:srcs [srcs null]
                       #:no-build? [no-build? #f]
                       #:no-build-lines? [no-build-lines? #f]
+                      #:no-trans-lines? [no-trans-lines? #f]
                       #:invert? [invert? #f]
                       #:quiet [quiet? #t]
                       #:dest-file [dest-file #f]
@@ -185,6 +190,7 @@
                 #:view-scale init-view-scale
                 #:invert? invert?
                 #:all-deps? (not no-build-lines?)
+                #:trans-deps? (not no-trans-lines?)
                 #:hilites (compute-closure
                            (if invert? invert-pkgs pkgs)
                            (let ([select-pkgs
@@ -216,5 +222,6 @@
      #:total-h total-h
      #:view-scale init-view-scale
      #:all-deps? (not no-build-lines?)
+     #:trans-deps? (not no-trans-lines?)
      #:invert? invert?
      #:select-packages select-pkgs)]))

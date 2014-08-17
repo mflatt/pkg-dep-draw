@@ -38,6 +38,7 @@
                     #:view-scale view-scale
                     #:invert? invert?
                     #:all-deps? all-deps?
+                    #:trans-deps? [trans-deps? #t]
                     #:hilites hilites)
   (send dc set-font font)
   (send dc set-scale view-scale view-scale)
@@ -81,7 +82,8 @@
       (for ([deps (list (pkg-deps p) (if all-deps? (pkg-build-deps p) null))]
             [pen (if here?
                      (list first-dep-pen first-build-dep-pen)
-                     (list dep-pen build-dep-pen))])
+                     (list dep-pen build-dep-pen))]
+            #:when (or here? trans-deps?))
         (for ([dep (in-list deps)])
           (define dest (hash-ref pkg-bounds dep))
           (define-values (from to)
@@ -109,7 +111,8 @@
       (send dc set-alpha 1)))
   (for ([pkg (in-hash-keys pkgs)])
     (define bounds (hash-ref pkg-bounds pkg))
-    (define on? (hash-ref hilites pkg #f))
+    (define maybe-on? (hash-ref hilites pkg #f))
+    (define on? (or (and trans-deps? maybe-on?) (and maybe-on? (<= maybe-on? 1))))
     (define draw-font (if on? hilite-font font))
     (send dc set-font draw-font)
     (send dc set-text-foreground (if on? hilite-color "black"))

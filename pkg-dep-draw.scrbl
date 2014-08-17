@@ -72,6 +72,12 @@ command-line @nonterm{option}s:
         In GUI mode, this option selects the initial state of the GUI,
         but it can be changed interactively.}
 
+ @item{@DFlag{no-trans-lines} --- Suppress lines in the visualization
+        that represent transitive dependencies.
+
+        In GUI mode, this option selects the initial state of the GUI,
+        but it can be changed interactively.}
+
  @item{@DFlag{reverse} --- Draw dependency lines backwards from the
        selected packages.
 
@@ -99,6 +105,7 @@ command-line @nonterm{option}s:
                        [#:srcs srcs (listof (cons/c (or/c 'dir 'catalog) string?)) null]
                        [#:no-build? no-build? any/c #f]
                        [#:no-build-lines? no-build-lines? any/c #f]
+                       [#:no-trans-lines? no-trans-lines? any/c #f]
                        [#:invert? invert? any/c #f]
                        [#:quiet quiet? any/c #t]
                        [#:dest-file dest-file (or/c #f path-string?) #f]
@@ -106,6 +113,6 @@ command-line @nonterm{option}s:
                        [#:scale scale real? 1])
           void?]{
 
-Draws a dependecny graph the same as running @racketmodname[pkg-dep-draw] as
+Draws a dependency graph the same as running @racketmodname[pkg-dep-draw] as
 a program with command-line arguments (with hopefully obvious
 representations and treatments of the arguments).}

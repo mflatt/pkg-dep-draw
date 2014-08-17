@@ -20,6 +20,7 @@
                   #:total-h total-h
                   #:view-scale [init-view-scale 1]
                   #:all-deps? [all-deps? #t]
+                  #:trans-deps? [trans-deps? #t]
                   #:invert? [invert? #f]
                   #:select-packages [select-pkgs null])
 
@@ -156,6 +157,7 @@
                 #:view-scale view-scale
                 #:invert? (send invert-checkbox get-value)
                 #:all-deps? (send build-deps-checkbox get-value)
+                #:trans-deps? (send trans-deps-checkbox get-value)
                 #:hilites hilites))
 
   (send c init-auto-scrollbars
@@ -173,6 +175,12 @@
          [parent hpanel]
          [label "Show build dependencies"]
          [value all-deps?]
+         [callback (lambda (cb e) (send c reset-hilites))]))
+  (define trans-deps-checkbox
+    (new check-box%
+         [parent hpanel]
+         [label "Show transitive dependencies"]
+         [value trans-deps?]
          [callback (lambda (cb e) (send c reset-hilites))]))
   (define invert-checkbox
     (new check-box%
