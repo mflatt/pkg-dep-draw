@@ -56,6 +56,15 @@
                             get-client-size
                             scroll
                             init-auto-scrollbars)
+                   (define queued-refresh? #f)
+                   (define/private (low-priority-refresh)
+                     (unless queued-refresh?
+                       (set! queued-refresh? #t)
+                       (queue-callback
+                        (lambda ()
+                          (set! queued-refresh? #f)
+                          (refresh))
+                        #f)))
                    (define/private (adjust-scroll dx dy)
                      (define-values (w h) (get-client-size))
                      (define-values (x y) (get-view-start))
@@ -75,7 +84,7 @@
                        (set! view-scale scale)
                        (set! offscreen #f)
                        (set! refresh-offscreen? #t)
-                       (refresh)
+                       (low-priority-refresh)
                        (define-values (w h) (get-client-size))
                        (define-values (x y) (get-view-start))
                        (define adj-w (- (* view-scale total-w) w))
@@ -125,7 +134,7 @@
                                                       hit-pkgs
                                                       all-deps?)))
                      (set! refresh-offscreen? #t)
-                     (refresh)))
+                     (low-priority-refresh)))
                  [parent panel]
                  [style '(hscroll vscroll)]
                  [paint-callback (lambda (c c-dc)
